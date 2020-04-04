@@ -16,10 +16,10 @@ class App : Application() {
 
         val network = NetworkFactory()
         starWarsClient = network.newRetrofit(
-                service = StarWarsAPI::class.java,
-                httpClient = network.newClientBuilder().build(),
-                converterFactory = GsonConverterFactory.create(),
-                baseUrl = "https://swapi.co/api/"
+            service = StarWarsAPI::class.java,
+            httpClient = network.newClientBuilder().build(),
+            converterFactory = GsonConverterFactory.create(),
+            baseUrl = "https://swapi.co/api/"
         )
     }
 }

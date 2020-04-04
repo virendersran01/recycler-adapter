@@ -1,8 +1,5 @@
 package net.gotev.recycleradapter
 
-/**
- * @author Aleksandar Gotev
- */
 fun AdapterItem<*>?.viewType() = this?.javaClass?.name?.hashCode() ?: 0
 fun Class<out AdapterItem<*>>.viewType() = hashCode()
 

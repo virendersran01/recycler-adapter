@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_sync.*
 import net.gotev.recycleradapter.AdapterItem
 import net.gotev.recycleradapter.RecyclerAdapter
+import net.gotev.recycleradapter.RecyclerListAdapter
 import net.gotev.recycleradapterdemo.R
 import net.gotev.recycleradapterdemo.adapteritems.LabelItem
 import net.gotev.recycleradapterdemo.adapteritems.SyncItem
@@ -27,7 +28,6 @@ class SyncActivity : AppCompatActivity() {
         }
     }
 
-    private lateinit var recyclerAdapter: RecyclerAdapter
     private var executor = ScheduledThreadPoolExecutor(1)
     private var scheduledOperation: ScheduledFuture<*>? = null
 
@@ -38,22 +38,24 @@ class SyncActivity : AppCompatActivity() {
             SyncItem(5, "listB")
     )
 
-    private fun listB(): ArrayList<SyncItem> {
+    private fun listB(): List<SyncItem> {
         listB.add(SyncItem(listB.last().id + 1, "listB${listB.last().id + 1}"))
         listB.add(SyncItem(listB.last().id + 1, "listB${listB.last().id + 1}"))
         return listB
     }
 
     private fun listA() =
-            arrayListOf(
+            listOf(
                     SyncItem(1, "listA"),
                     SyncItem(2, "listA")
             )
 
     private fun listC() =
-            arrayListOf(
+            listOf(
                     SyncItem(1, "listC")
             )
+
+    private val recyclerAdapter = RecyclerListAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,11 +70,6 @@ class SyncActivity : AppCompatActivity() {
 
         val linearLayoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
 
-        recyclerAdapter = RecyclerAdapter().apply {
-            setEmptyItem(LabelItem(getString(R.string.empty_list)))
-            lockScrollingWhileInserting(linearLayoutManager)
-        }
-
         recycler_view.apply {
             // fix blinking of first item when shuffling
             itemAnimator?.changeDuration = 0
@@ -83,19 +80,19 @@ class SyncActivity : AppCompatActivity() {
         }
 
         syncA.setOnClickListener {
-            recyclerAdapter.syncWithItems(listA())
+            recyclerAdapter.submitList(listA())
         }
 
         syncB.setOnClickListener {
-            recyclerAdapter.syncWithItems(listB())
+            recyclerAdapter.submitList(listB())
         }
 
         syncC.setOnClickListener {
-            recyclerAdapter.syncWithItems(listC())
+            recyclerAdapter.submitList(listC())
         }
 
         empty.setOnClickListener {
-            recyclerAdapter.clear()
+            recyclerAdapter.submitList(emptyList())
         }
 
         shuffle.setOnClickListener {
@@ -103,7 +100,7 @@ class SyncActivity : AppCompatActivity() {
                 shuffle.text = getString(R.string.button_shuffle_stop)
                 executor.scheduleAtFixedRate({
                     runOnUiThread {
-                        recyclerAdapter.syncWithItems(ArrayList(createItems()))
+                        recyclerAdapter.submitList(createItems())
                     }
                 }, 1, 100, TimeUnit.MILLISECONDS)
             } else {
@@ -133,12 +130,12 @@ class SyncActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.sort_ascending -> {
-            recyclerAdapter.sort(ascending = true)
+            //recyclerAdapter.sort(ascending = true)
             true
         }
 
         R.id.sort_descending -> {
-            recyclerAdapter.sort(false)
+            //recyclerAdapter.sort(false)
             true
         }
 
