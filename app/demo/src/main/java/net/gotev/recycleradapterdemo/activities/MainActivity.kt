@@ -30,16 +30,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         recyclerAdapter = RecyclerAdapter()
-        recyclerAdapter.setEmptyItem(LabelItem(getString(R.string.empty_list)))
+        recyclerAdapter.emptyItem = LabelItem(getString(R.string.empty_list))
 
         recycler_view.apply {
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             adapter = recyclerAdapter
-            recyclerAdapter.enableDragDrop(this)
+            // recyclerAdapter.enableDragDrop(this)
         }
 
         // add an item
-        recyclerAdapter.add(MyLeaveBehindItem("swipe to left to leave behind", "option"))
+        val leaveBehindItem = MyLeaveBehindItem("swipe to left to leave behind", "option")
 
         // add many items of two kinds
         val items = (0..random.nextInt(200) + 50).map {
@@ -49,38 +49,38 @@ class MainActivity : AppCompatActivity() {
                 TextWithToggleItem("Toggle $it")
         }
 
-        recyclerAdapter.add(items)
+        recyclerAdapter.submitList(listOf(leaveBehindItem) + items)
 
         configureActions()
     }
 
     private fun configureActions() {
         remove_all_items_of_a_kind.setOnClickListener {
-            recyclerAdapter.removeAllItemsWithClass(TitleSubtitleItem::class.java)
+            recyclerAdapter.currentList
+            val itemsWithoutTitleSubtitleItems = recyclerAdapter.currentList.filter { it.javaClass != TitleSubtitleItem::class.java }
+            recyclerAdapter.submitList(itemsWithoutTitleSubtitleItems)
         }
 
         remove_last_item_of_a_kind.setOnClickListener {
-            recyclerAdapter.removeLastItemWithClass(TextWithToggleItem::class.java)
-        }
-
-        remove_last_item_of_a_kind.setOnClickListener {
-            recyclerAdapter.removeLastItemWithClass(TextWithToggleItem::class.java)
+            recyclerAdapter.currentList.apply {
+                val lastTextWithToggleIndex = indexOfLast { it.javaClass == TextWithToggleItem::class.java }
+                if (lastTextWithToggleIndex >= 0) {
+                    recyclerAdapter.submitList(filterIndexed { index, _ -> index != lastTextWithToggleIndex })
+                }
+            }
         }
 
         remove_all.setOnClickListener {
-            recyclerAdapter.clear()
+            recyclerAdapter.submitList(emptyList())
         }
 
         add_item.setOnClickListener {
-            recyclerAdapter.add(
-                    TitleSubtitleItem("Item ${UUID.randomUUID()}"),
-                    position = 1
-            )
+            val item = TitleSubtitleItem("Item ${UUID.randomUUID()}")
+            recyclerAdapter.submitList(recyclerAdapter.currentList.toMutableList().apply { add(1, item) })
         }
     }
 
     private fun onSearch(query: String?) {
-        recyclerAdapter.filter(query)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

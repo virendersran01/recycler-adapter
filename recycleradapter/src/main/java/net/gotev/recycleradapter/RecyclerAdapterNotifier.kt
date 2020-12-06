@@ -7,12 +7,6 @@ package net.gotev.recycleradapter
  */
 interface RecyclerAdapterNotifier {
     /**
-     * Notifies that the cell calling this method has been selected (used in single or multiple
-     * selection mode)
-     */
-    fun selected(holder: RecyclerAdapterViewHolder)
-
-    /**
      * Gets the AdapterItem associated to the given ViewHolder.
      */
     fun getAdapterItem(holder: RecyclerAdapterViewHolder): AdapterItem<*>?

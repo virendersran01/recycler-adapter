@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_sync.*
 import net.gotev.recycleradapter.AdapterItem
 import net.gotev.recycleradapter.RecyclerAdapter
-import net.gotev.recycleradapter.RecyclerListAdapter
 import net.gotev.recycleradapterdemo.R
 import net.gotev.recycleradapterdemo.adapteritems.LabelItem
 import net.gotev.recycleradapterdemo.adapteritems.SyncItem
@@ -55,7 +54,7 @@ class SyncActivity : AppCompatActivity() {
                     SyncItem(1, "listC")
             )
 
-    private val recyclerAdapter = RecyclerListAdapter()
+    private val recyclerAdapter = RecyclerAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

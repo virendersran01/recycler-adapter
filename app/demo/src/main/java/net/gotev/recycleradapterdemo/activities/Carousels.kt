@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_recycler_view.*
 import net.gotev.recycleradapter.RecyclerAdapter
 import net.gotev.recycleradapter.ext.NestedRecyclerAdapterItem
+import net.gotev.recycleradapter.ext.createRecyclerAdapterWith
 import net.gotev.recycleradapterdemo.R
 import net.gotev.recycleradapterdemo.adapteritems.LabelItem
 import net.gotev.recycleradapterdemo.adapteritems.TitledCarousel
@@ -47,16 +48,12 @@ class Carousels : AppCompatActivity() {
         recycler_view.adapter = recyclerAdapter
 
         val recycledViewPool = if (withPool) {
-            RecyclerAdapter.createRecycledViewPool(
-                    parent = recycler_view,
-                    items = listOf(LabelItem("")),
-                    maxViewsPerItem = 50
-            )
+            RecyclerView.RecycledViewPool()
         } else {
             null
         }
 
-        recyclerAdapter.add(createCarousels(recycledViewPool))
+        recyclerAdapter.submitList(createCarousels(recycledViewPool))
 
         swipeRefresh.setOnRefreshListener {
             swipeRefresh.isRefreshing = false
@@ -73,9 +70,7 @@ class Carousels : AppCompatActivity() {
     private fun createCarousels(recycledViewPool: RecyclerView.RecycledViewPool?)
             : List<NestedRecyclerAdapterItem<*>> {
         return (0..60).map {
-            val adapter = RecyclerAdapter().apply {
-                add(createCarouselItems())
-            }
+            val adapter = createRecyclerAdapterWith(createCarouselItems())
 
             TitledCarousel("Carousel $it", adapter, recycledViewPool)
         }

@@ -13,8 +13,6 @@ class LabelItem(private val text: String, private val selectionGroup: String? = 
 
     override fun getLayoutId() = R.layout.item_empty
 
-    override fun getSelectionGroup() = selectionGroup
-
     override fun bind(firstTime: Boolean, holder: Holder) {
         holder.textViewField.text = text
     }

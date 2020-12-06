@@ -8,8 +8,6 @@ import net.gotev.recycleradapterdemo.R
 
 class MyLeaveBehindItem(private val value: String, private val background: String) : LeaveBehindAdapterItem<MyLeaveBehindItem.Holder>(value) {
 
-    override fun onFilter(searchTerm: String) = value.contains(searchTerm, ignoreCase = true)
-
     override fun bind(firstTime: Boolean, holder: Holder) {
         holder.nameField.text = value
         holder.deleteField.text = background

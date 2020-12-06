@@ -12,35 +12,13 @@ typealias AdapterItems = ArrayList<AdapterItem<*>>
 
 fun createRecyclerAdapterWith(vararg items: AdapterItem<*>?): RecyclerAdapter {
     return RecyclerAdapter().apply {
-        val filtered = items.filterNotNull()
-        if (filtered.isNotEmpty()) {
-            add(filtered)
-        }
+        submitList(items.filterNotNull())
     }
 }
 
 fun createRecyclerAdapterWith(list: List<AdapterItem<*>?>?): RecyclerAdapter {
     return RecyclerAdapter().apply {
-        val filtered = list?.filterNotNull() ?: emptyList()
-        if (filtered.isNotEmpty()) {
-            add(filtered)
-        }
-    }
-}
-
-fun listOfAdapterItems(vararg items: AdapterItem<*>?): AdapterItems {
-    return if (items.isEmpty()) {
-        ArrayList(1)
-    } else {
-        ArrayList(items.filterNotNull())
-    }
-}
-
-fun AdapterItems.adding(item: AdapterItem<*>?): AdapterItems {
-    return if (item == null) {
-        this
-    } else {
-        apply { add(item) }
+        submitList(list?.filterNotNull() ?: emptyList())
     }
 }
 
@@ -65,7 +43,7 @@ inline fun <T> Iterable<T>.mapToManyAdapterItems(transform: (T) -> List<AdapterI
 }
 
 inline fun <T> Iterable<T>.createRecyclerAdapterByMapping(transform: (T) -> AdapterItem<*>?): RecyclerAdapter {
-    return RecyclerAdapter().add(mapToAdapterItems(transform))
+    return RecyclerAdapter().apply { submitList(mapToAdapterItems(transform)) }
 }
 
 inline fun <T> Iterable<T>.mapToAdapterItems(transform: (T) -> AdapterItem<*>?): AdapterItems {
@@ -117,22 +95,14 @@ interface RecyclerAdapterProvider {
     val recyclerAdapter: RecyclerAdapter
 
     fun AdapterItems.render() {
-        recyclerAdapter.syncWithItems(this)
+        recyclerAdapter.submitList(this)
     }
 
     fun render(vararg items: AdapterItem<*>?) {
-        renderList(items.filterNotNull())
+        recyclerAdapter.submitList(items.filterNotNull())
     }
 
     fun render(list: List<AdapterItem<*>?>?) {
-        renderList(list?.filterNotNull() ?: emptyList())
-    }
-
-    private fun renderList(list: List<AdapterItem<*>>) {
-        if (list.isEmpty()) {
-            recyclerAdapter.clear()
-        } else {
-            ArrayList(list).render()
-        }
+        recyclerAdapter.submitList(list?.filterNotNull() ?: emptyList())
     }
 }

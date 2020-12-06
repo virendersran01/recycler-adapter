@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_selection.*
 import net.gotev.recycleradapter.AdapterItem
 import net.gotev.recycleradapter.RecyclerAdapter
-import net.gotev.recycleradapter.SelectionGroupListener
 import net.gotev.recycleradapterdemo.R
 import net.gotev.recycleradapterdemo.adapteritems.LabelItem
 import net.gotev.recycleradapterdemo.adapteritems.SelectableItem
@@ -27,7 +26,7 @@ class SelectionActivity : AppCompatActivity() {
         }
     }
 
-    private lateinit var groupListener: SelectionGroupListener
+    // private lateinit var groupListener: SelectionGroupListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +39,7 @@ class SelectionActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
+        /*
         val recyclerAdapter = RecyclerAdapter()
         recyclerAdapter.setEmptyItem(LabelItem(getString(R.string.empty_list)))
 
@@ -55,8 +55,9 @@ class SelectionActivity : AppCompatActivity() {
                     "$group: ${selected.asString()}",
                     Toast.LENGTH_SHORT
             ).show()
-        }
+        }*/
 
+        /*
         recyclerAdapter.apply {
             setSelectionGroupPolicy(selectionGroupA, multiSelect = false)
             setSelectionGroupListener(selectionGroupA, groupListener)
@@ -71,13 +72,13 @@ class SelectionActivity : AppCompatActivity() {
             add(LabelItem(getString(R.string.multiple_selection)))
 
             add((4..7).map { SelectableItem("Option $it", selectionGroupB) })
-        }
+        }*/
 
         action_button.apply {
             text = getString(R.string.show_selections)
 
             setOnClickListener {
-                val selectedA = recyclerAdapter.getSelectedAsString(selectionGroupA)
+                /*val selectedA = recyclerAdapter.getSelectedAsString(selectionGroupA)
                 val selectedB = recyclerAdapter.getSelectedAsString(selectionGroupB)
 
                 AlertDialog.Builder(this@SelectionActivity)
@@ -85,14 +86,11 @@ class SelectionActivity : AppCompatActivity() {
                         .setMessage("${getString(R.string.single_selection)}:\n$selectedA\n\n" +
                                 "${getString(R.string.multiple_selection)}:\n$selectedB")
                         .setPositiveButton("Ok", null)
-                        .show()
+                        .show()*/
             }
         }
 
     }
-
-    private fun RecyclerAdapter.getSelectedAsString(selectionGroup: String) =
-            getSelectedItems(selectionGroup).asString()
 
     private fun List<AdapterItem<*>>.asString() = joinToString { (it as SelectableItem).label }
             .let { if (it.isBlank()) "None" else it }

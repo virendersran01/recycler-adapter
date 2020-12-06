@@ -4,7 +4,7 @@ import androidx.paging.DataSource
 import net.gotev.recycleradapter.AdapterItem
 
 internal class DataSourceFactory<T>(
-    private val dataSource: () -> DataSource<*, *>
+    private val dataSource: () -> DataSource<*, AdapterItem<*>>
 ) : DataSource.Factory<T, AdapterItem<*>>() {
 
     @Suppress("UNCHECKED_CAST")

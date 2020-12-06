@@ -16,8 +16,6 @@ class TextWithToggleItem(private val text: String) : AdapterItem<TextWithToggleI
 
     override fun getLayoutId() = R.layout.item_text_with_toggle
 
-    override fun onFilter(searchTerm: String) = text.contains(searchTerm, ignoreCase = true)
-
     override fun bind(firstTime: Boolean, holder: Holder) {
         holder.textViewField.text = text
         holder.buttonField.isChecked = pressed

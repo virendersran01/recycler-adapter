@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_selection.*
 import net.gotev.recycleradapter.RecyclerAdapter
-import net.gotev.recycleradapter.SelectionGroupListener
 import net.gotev.recycleradapterdemo.R
 import net.gotev.recycleradapterdemo.adapteritems.LabelItem
 import net.gotev.recycleradapterdemo.adapteritems.SelectableItem
@@ -26,7 +25,7 @@ class MasterSlaveGroupsActivity : AppCompatActivity() {
         }
     }
 
-    private lateinit var masterGroupListener: SelectionGroupListener
+    // private lateinit var masterGroupListener: SelectionGroupListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +39,7 @@ class MasterSlaveGroupsActivity : AppCompatActivity() {
         }
 
         val recyclerAdapter = RecyclerAdapter()
-        recyclerAdapter.setEmptyItem(LabelItem(getString(R.string.empty_list)))
+        recyclerAdapter.emptyItem = LabelItem(getString(R.string.empty_list))
 
         recycler_view.apply {
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
@@ -54,18 +53,19 @@ class MasterSlaveGroupsActivity : AppCompatActivity() {
                 val masterItems = loadMasterGroupItems()
 
                 recyclerAdapter.apply {
-                    replaceSelectionGroupItems(masterGroup, masterItems)
-                    selectItem(masterItems.firstOrNull())
+                    //replaceSelectionGroupItems(masterGroup, masterItems)
+                    //selectItem(masterItems.firstOrNull())
                 }
 
                 button.visibility = View.GONE
             }
         }
 
+        /*
         masterGroupListener = { group, selected ->
             val selectedItem = selected.first() as SelectableItem
             Log.i("Selection", "Master group option selected is now: ${selectedItem.label}")
-            recyclerAdapter.replaceSelectionGroupItems(slaveGroup, loadSlaveGroupItems(selectedItem))
+            //recyclerAdapter.replaceSelectionGroupItems(slaveGroup, loadSlaveGroupItems(selectedItem))
         }
 
         recyclerAdapter.apply {
@@ -83,7 +83,7 @@ class MasterSlaveGroupsActivity : AppCompatActivity() {
             add(LabelItem("Please select a food category first", slaveGroup))
 
             add(LabelItem("End of selection list"))
-        }
+        }*/
 
     }
 

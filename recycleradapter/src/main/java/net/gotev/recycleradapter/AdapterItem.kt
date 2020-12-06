@@ -11,9 +11,6 @@ import java.lang.reflect.InvocationTargetException
  * @param <T> ViewHolder subclass
 </T> */
 abstract class AdapterItem<T : RecyclerAdapterViewHolder>(private val model: Any) : Comparable<AdapterItem<*>> {
-
-    var selected = false
-
     /**
      * Returns the identifier for this adapter item. Used in diffing operations.
      *
@@ -34,7 +31,7 @@ abstract class AdapterItem<T : RecyclerAdapterViewHolder>(private val model: Any
      * of the model instance passed in AdapterItem class constructor.
      *
      * javaClass.name (Kotlin) is needed to avoid collisions with other adapter items representing
-     * the same model. 
+     * the same model.
      */
     open fun diffingId(): String = model.javaClass.name + model.hashCode().toString()
 
@@ -43,13 +40,6 @@ abstract class AdapterItem<T : RecyclerAdapterViewHolder>(private val model: Any
      * @return layout ID
      */
     abstract fun getLayoutId(): Int
-
-    /**
-     * Gets called for every item when the [RecyclerAdapter.filter] method gets called.
-     * @param searchTerm term to search for
-     * @return true if the items matches the search term, false otherwise
-     */
-    open fun onFilter(searchTerm: String): Boolean = true
 
     /**
      * Gets called when you perform [RecyclerAdapter.syncWithItems], specifically when
@@ -127,25 +117,6 @@ abstract class AdapterItem<T : RecyclerAdapterViewHolder>(private val model: Any
      * @param holder ViewHolder on which to bind data
      */
     abstract fun bind(firstTime: Boolean, holder: T)
-
-    /**
-     * Returns the ID of this item's selection group. By default it's null.
-     * This is used when you want to perform single or multiple selections in the RecyclerView and
-     * you need to know all the items belonging to that group.
-     * For an item to be selectable, it's necessary that it belongs to a selection group.
-     *
-     * By returning null, the item does not belong to any selection group.
-     */
-    open fun getSelectionGroup(): String? = null
-
-    /**
-     * Method called only when using single or multiple selection and the selection status of this
-     * item has changed.
-     *
-     * Returning true causes the rebinding of the item, useful when you need to display state
-     * changes (e.g. checkbox changing status from checked to unchecked)
-     */
-    open fun onSelectionChanged(isNowSelected: Boolean): Boolean = true
 
     override fun compareTo(other: AdapterItem<*>) = 0
 

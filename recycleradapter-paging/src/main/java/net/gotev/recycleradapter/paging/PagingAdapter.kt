@@ -9,29 +9,20 @@ import androidx.paging.PagedList
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import net.gotev.recycleradapter.AdapterItem
+import net.gotev.recycleradapter.RecyclerAdapter
 import net.gotev.recycleradapter.RecyclerAdapterNotifier
 import net.gotev.recycleradapter.RecyclerAdapterViewHolder
 import net.gotev.recycleradapter.castAsIn
 import net.gotev.recycleradapter.viewType
 
 class PagingAdapter(
-    dataSource: () -> DataSource<*, *>,
+    dataSource: () -> DataSource<*, AdapterItem<*>>,
     config: PagedList.Config
-) : PagedListAdapter<AdapterItem<*>, RecyclerAdapterViewHolder>(diffCallback),
+) : PagedListAdapter<AdapterItem<*>, RecyclerAdapterViewHolder>(RecyclerAdapter.diffCallback),
     RecyclerAdapterNotifier {
 
-    companion object {
-        val diffCallback = object : DiffUtil.ItemCallback<AdapterItem<*>>() {
-            override fun areItemsTheSame(oldItem: AdapterItem<*>, newItem: AdapterItem<*>) =
-                oldItem == newItem
-
-            override fun areContentsTheSame(oldItem: AdapterItem<*>, newItem: AdapterItem<*>) =
-                !oldItem.hasToBeReplacedBy(oldItem)
-        }
-    }
-
     private val dataSourceFactory: DataSourceFactory<Any> = DataSourceFactory(dataSource)
-    private val data = LivePagedListBuilder<Any, AdapterItem<*>>(dataSourceFactory, config).build()
+    private val data = LivePagedListBuilder(dataSourceFactory, config).build()
 
     init {
         setHasStableIds(true)
@@ -89,10 +80,6 @@ class PagingAdapter(
 
     override fun getAdapterItem(holder: RecyclerAdapterViewHolder): AdapterItem<*>? {
         return getItem(holder.adapterPosition)
-    }
-
-    override fun selected(holder: RecyclerAdapterViewHolder) {
-        // not supported
     }
 
     override fun notifyItemChanged(holder: RecyclerAdapterViewHolder) {
